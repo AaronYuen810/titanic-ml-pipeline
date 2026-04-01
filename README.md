@@ -1,4 +1,4 @@
-Titanic ML Pipeline
+# Titanic ML Pipeline
 
 This repository demonstrates the end-to-end lifecycle of a Machine Learning project, transitioning from an experimental Jupyter Notebook to a production-ready FastAPI inference service, fully containerized with Docker and deployed to the cloud.
 
