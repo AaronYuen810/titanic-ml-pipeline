@@ -25,6 +25,7 @@ pythonpath = ["."]
 # Optional: Specific ruff configuration
 line-length = 88
 target-version = "py312" # Matches your project's python version
+extend-exclude = ["notebooks"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I"] # Enable Pyflakes, Error, and Isort rules

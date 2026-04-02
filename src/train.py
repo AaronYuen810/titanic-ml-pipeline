@@ -1,11 +1,13 @@
 import os
+
+import joblib
 import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LogisticRegression
-from preprocess import TitanicPreprocessor
-from sklearn.metrics import accuracy_score, roc_auc_score, classification_report
-import joblib
+
+from src.preprocess import TitanicPreprocessor
 
 
 def main():

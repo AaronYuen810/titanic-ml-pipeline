@@ -1,11 +1,10 @@
-# Ensure the unpickler can locate `preprocess.py`
 import os
 import sys
-from contextlib import asynccontextmanager
 from typing import List
-from fastapi import FastAPI
+
 import joblib
 import pandas as pd
+from fastapi import FastAPI
 
 # Add the project root to the Python path so that the unpickler can find `preprocess.py`
 sys.path.insert(
@@ -13,7 +12,6 @@ sys.path.insert(
 )
 
 from app.schema import PassengerInput, PredictionOutput
-
 
 # Load the model
 MODEL_PATH = os.path.join(
@@ -36,6 +34,7 @@ async def lifespan(app: FastAPI):
     yield
 
     # clear model on shutdown
+    global pipeline
     pipeline = None
 
 
@@ -43,7 +42,10 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Titanic Survival Prediction API",
     version="1.0.0",
-    description="Predict whether a passenger survived the Titanic disaster based on their characteristics",
+    description=(
+        "Predict whether a passenger survived the Titanic disaster based on their "
+        "characteristics"
+    ),
     lifespan=lifespan,
 )
 

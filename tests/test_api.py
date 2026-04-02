@@ -1,18 +1,19 @@
+import pandas as pd
 import pytest
 from fastapi.testclient import TestClient
-import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 
-from app.main import app
 import app.main as main
+from app.main import app
 from app.schema import PredictionOutput
 from src.preprocess import TitanicPreprocessor
 
 
 @pytest.fixture
 def client(monkeypatch: pytest.MonkeyPatch):
-    # Inject a tiny in-memory fitted pipeline so tests don't depend on models/model_pipeline.joblib
+    # Inject a tiny in-memory fitted pipeline so tests don't depend on
+    # models/model_pipeline.joblib
     X_train = pd.DataFrame(
         [
             {"Pclass": 1, "Sex": "male", "Age": 10.0},

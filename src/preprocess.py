@@ -41,7 +41,7 @@ class TitanicPreprocessor(BaseEstimator, TransformerMixin):
                 X_copy = X_copy.drop(columns=[col])
 
         # Handle case if an expected column is totally missing from input
-        # Ideally this should never happen, but just in case, because the validation will be handled by pydantic.
+        # Ideally this should never happen
         for col in expected_columns:
             if col not in X_copy.columns:
                 X_copy[col] = 0
