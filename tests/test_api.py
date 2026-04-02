@@ -9,6 +9,7 @@ import app.main as main
 from app.schema import PredictionOutput
 from src.preprocess import TitanicPreprocessor
 
+
 @pytest.fixture
 def client(monkeypatch: pytest.MonkeyPatch):
     # Inject a tiny in-memory fitted pipeline so tests don't depend on models/model_pipeline.joblib
@@ -34,10 +35,12 @@ def client(monkeypatch: pytest.MonkeyPatch):
     with TestClient(app) as c:
         yield c
 
+
 def test_health_check(client: TestClient):
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json() == {"status": "healthy", "model_loaded": True}
+
 
 def test_predict_endpoint(client: TestClient):
     payload = [
@@ -50,7 +53,7 @@ def test_predict_endpoint(client: TestClient):
             "Pclass": 2,
             "Sex": "female",
             "Age": 30.0,
-        }
+        },
     ]
     response = client.post("/predict", json=payload)
 
@@ -58,12 +61,11 @@ def test_predict_endpoint(client: TestClient):
 
     data = response.json()
     assert len(data) == len(payload)
-    
+
     for d in data:
         prediction_output = PredictionOutput(**d)
         assert prediction_output.survived in (0, 1)
         assert 0.0 <= prediction_output.probability <= 1.0
-        
 
 
 def test_predict_empty_input(client):
@@ -75,9 +77,7 @@ def test_predict_empty_input(client):
 def test_predict_missing_data(client):
     # Testing an empty list or bad data
 
-    missing_data = [{
-        "Pclass": 1
-    }]
+    missing_data = [{"Pclass": 1}]
     response = client.post("/predict", json=missing_data)
     assert response.status_code == 422  # Unprocessable Entity
 
