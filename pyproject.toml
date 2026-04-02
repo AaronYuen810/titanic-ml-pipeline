@@ -15,7 +15,17 @@ dependencies = [
 dev = [
     "httpx>=0.28.1",
     "pytest>=9.0.2",
+    "ruff>=0.15.8",
 ]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
+
+[tool.ruff]
+# Optional: Specific ruff configuration
+line-length = 88
+target-version = "py312" # Matches your project's python version
+
+[tool.ruff.lint]
+select = ["E", "F", "I"] # Enable Pyflakes, Error, and Isort rules
+
