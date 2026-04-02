@@ -1,0 +1,36 @@
+# Git and IDE
+.git
+.gitattributes
+.github
+.cursor
+.vscode
+.idea
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Python
+.venv
+venv
+env
+__pycache__
+*.py[cod]
+*$py.class
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+htmlcov
+*.cover
+
+# OS
+.DS_Store
+
+# Local artifacts (built in trainer stage or mounted at runtime)
+models
+
+# Docs (not needed in image)
+*.md
