@@ -1,5 +1,6 @@
-from src.preprocess import TitanicPreprocessor
 import pandas as pd
+
+from src.preprocess import TitanicPreprocessor
 
 
 def test_titanic_preprocessor_age_imputation():

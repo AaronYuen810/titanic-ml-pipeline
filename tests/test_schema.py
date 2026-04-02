@@ -1,6 +1,7 @@
 import pytest
 from pydantic import ValidationError
-from app.schema import PassengerInput, PredictionOutput
+
+from app.schema import PassengerInput
 
 
 def test_passenger_input_validation():
