@@ -17,14 +17,13 @@ The goal of this project is to showcase the "productionization" of a standard ML
 
 ```text
 .
-├── notebooks/          # Initial EDA and model prototyping
-├── src/                # Production-ready source code
-│   ├── main.py         # FastAPI application entry point
-│   ├── model.py        # Model loading and prediction logic
-│   └── processing.py   # Data transformation and feature engineering
-├── models/             # Serialized model files (.pkl or .joblib)
-├── Dockerfile          # Instructions for building the container image
-├── requirements.txt    # Project dependencies
+├── app/                # FastAPI application (e.g. main.py, schema)
+├── data/               # Training CSVs
+├── src/                # Training and preprocessing (train.py, preprocess.py)
+├── models/             # Serialized model (model_pipeline.joblib); produced by training or Docker build
+├── Dockerfile          # Multi-stage image: train, then API
+├── docker-compose.yml  # Local run: build + port 8000
+├── pyproject.toml      # Dependencies (locked with uv.lock)
 └── README.md
 ```
 
@@ -34,13 +33,13 @@ The goal of this project is to showcase the "productionization" of a standard ML
 * **Backend:** FastAPI, Uvicorn (ASGI Server)
 * **DevOps:** Docker
 * **Cloud:** [Insert Cloud Provider, e.g., AWS / GCP / Azure]
-* **Environment:** Python 3.9+
+* **Environment:** Python 3.12+
 
 ## 🚦 Getting Started
 
 ### Prerequisites
-* Docker installed locally
-* Python 3.9+ (for local development)
+* Docker installed locally (BuildKit enabled)
+* Python 3.12+ and [uv](https://docs.astral.sh/uv/) (for local development)
 
 ### Local Development
 1. **Clone the repository:**
@@ -51,23 +50,30 @@ The goal of this project is to showcase the "productionization" of a standard ML
 
 2. **Install dependencies:**
    ```bash
-   pip install -r requirements.txt
+   uv sync
    ```
 
-3. **Run the API locally:**
+3. **Run the API locally** (from the repo root, after training has produced `models/model_pipeline.joblib`):
    ```bash
-   uvicorn src.main:app --reload
+   uv run uvicorn app.main:app --reload
    ```
 
 ### Running with Docker
+The image is **multi-stage**: it trains the model from `data/train.csv` in the build, then runs the FastAPI app with the trained `models/model_pipeline.joblib`.
+
 1. **Build the image:**
    ```bash
-   docker build -t titanic-prediction-app .
+   docker build -t titanic-api .
    ```
 
 2. **Run the container:**
    ```bash
-   docker run -p 8000:8000 titanic-prediction-app
+   docker run -p 8000:8000 titanic-api
+   ```
+
+3. **Or use Compose:**
+   ```bash
+   docker compose up --build
    ```
 
 ## 🔌 API Usage
@@ -76,17 +82,16 @@ Once the app is running, you can access the interactive API documentation (Swagg
 `http://localhost:8000/docs`
 
 ### Example Request
-**POST** `/predict`
+**POST** `/predict` (body is a JSON array of passengers)
+
 ```json
-{
-  "Pclass": 3,
-  "Sex": "male",
-  "Age": 22,
-  "SibSp": 1,
-  "Parch": 0,
-  "Fare": 7.25,
-  "Embarked": "S"
-}
+[
+  {
+    "Pclass": 3,
+    "Sex": "male",
+    "Age": 22.0
+  }
+]
 ```
 
 ## ☁️ Cloud Deployment
