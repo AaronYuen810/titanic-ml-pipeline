@@ -18,7 +18,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 COPY src/ src/
 COPY data/ data/
 
-RUN uv run python src/train.py
+RUN uv run python -m src.train
 
 FROM python:3.12-slim-bookworm AS runtime
 
