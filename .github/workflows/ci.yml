@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: 1. Run Tests and Build Docker Image in GHCR
 
 on:
   push:
