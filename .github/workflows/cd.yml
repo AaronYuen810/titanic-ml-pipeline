@@ -31,6 +31,7 @@ name: '2. Build and Deploy to Cloud Run'
 
 on:
   workflow_run:
+    branches: [main]
     workflows: [1. Run Tests and Build Docker Image in GHCR]
     types: [completed]
 
@@ -39,6 +40,7 @@ env:
   REGION: ${{ vars.REGION }} # TODO: update to your region
   SERVICE: ${{ vars.SERVICE }} # TODO: update to your service name
   WORKLOAD_IDENTITY_PROVIDER: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
+  SERVICE_ACCOUNT: ${{ vars.SERVICE_ACCOUNT }}
 
 jobs:
   deploy:
@@ -61,6 +63,8 @@ jobs:
         uses: 'google-github-actions/auth@f112390a2df9932162083945e46d439060d66ec2' # google-github-actions/auth@v2
         with:
           workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
+          service_account: '${{ env.SERVICE_ACCOUNT }}'
+          token_format: 'access_token'
 
       # BEGIN - Docker auth and build
       #
