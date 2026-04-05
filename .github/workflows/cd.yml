@@ -35,10 +35,10 @@ on:
     types: [completed]
 
 env:
-  PROJECT_ID: '${{ vars.PROJECT_ID }}' # TODO: update to your Google Cloud project ID
-  REGION: '${{ vars.REGION }}' # TODO: update to your region
-  SERVICE: '${{ vars.SERVICE }}' # TODO: update to your service name
-  WORKLOAD_IDENTITY_PROVIDER: '${{ vars.WORKLOAD_IDENTITY_PROVIDER }}'
+  PROJECT_ID: ${{ vars.PROJECT_ID }} # TODO: update to your Google Cloud project ID
+  REGION: ${{ vars.REGION }} # TODO: update to your region
+  SERVICE: ${{ vars.SERVICE }} # TODO: update to your service name
+  WORKLOAD_IDENTITY_PROVIDER: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
 
 jobs:
   deploy:
