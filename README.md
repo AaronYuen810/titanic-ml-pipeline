@@ -29,10 +29,14 @@ The goal of this project is to showcase the "productionization" of a standard ML
 
 ## 🛠️ Tech Stack
 
-- **ML Framework:** Scikit-learn, Pandas, NumPy
-- **Backend:** FastAPI, Uvicorn (ASGI Server)
-- **DevOps:** Docker
-- **Cloud:** [Insert Cloud Provider, e.g., AWS / GCP / Azure]
+- **Feature engineering & training:** Python, Pandas, scikit-learn (plus NumPy)
+- **Serving API:** FastAPI (Uvicorn ASGI server)
+- **Containerization:** Docker
+- **CI/CD:** GitHub Actions
+  - **CI**: Ruff lint + Pytest unit tests; builds and pushes a Docker image to GHCR
+  - **CD**: Promotes the image to Google Artifact Registry (GAR) and deploys it to Cloud Run
+- **Cloud runtime:** Google Cloud Run
+- **Container registry:** Google Artifact Registry (GAR) (production) + GitHub Container Registry (GHCR) (build artifact)
 - **Environment:** Python 3.12+
 
 ## 🚦 Getting Started
@@ -96,7 +100,17 @@ Once the app is running, you can access the interactive API documentation (Swagg
 
 ## ☁️ Cloud Deployment
 
-This application is configured for deployment via [Insert Deployment Method, e.g., GitHub Actions to AWS App Runner]. The Dockerized nature allows it to scale horizontally to meet demand.
+This project deploys to **Google Cloud Run** using **GitHub Actions**:
+
+- **CI workflow** (`.github/workflows/ci.yml`)
+  - Runs **Ruff** + **Pytest** (unit tests only for this project)
+  - Builds and pushes the Docker image to **GHCR** (tags include `sha-<shortsha>`; and SemVer on `vX.Y.Z` tags)
+- **CD workflow** (`.github/workflows/cd.yml`)
+  - Triggers only after CI completes successfully on `main`
+  - Pulls the CI-built image from **GHCR**, tags it into **GAR** (pinned by digest), then deploys that exact image to **Cloud Run**
+  - Injects runtime metadata as env vars (`APP_VERSION`, `GIT_SHA`, `IMAGE_DIGEST`) used by the API’s `/health` and `/version` endpoints
+
+The Dockerized service can scale horizontally on Cloud Run based on traffic.
 
 ## Room for Improvements
 
